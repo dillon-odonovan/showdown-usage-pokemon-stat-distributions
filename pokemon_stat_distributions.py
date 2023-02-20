@@ -1,8 +1,10 @@
 from collections import Counter
 import ijson
-from math import floor
+from os import makedirs
+from os.path import dirname, exists
 import pokebase
-from pokemon.stat import Stat, calc_stat_at_lv_50
+from pokemon.calc import calc_stat_at_lv_50
+from pokemon.stat import Stat
 from pokemon.spread import Spread
 from time import sleep
 
@@ -24,8 +26,10 @@ POKEBASE_NORMALIZED_POKEMON_NAMES = {
 TPS = 100
 
 
-def create_file(pokemon_name: str, pokemon_stat_distribution: dict[Stat, Counter[int, int]], num: int):
-    with open(f'./out/{pokemon_name}.txt', 'w') as f:  # TODO make output file dynamic
+def create_file(stats_dir: str, pokemon_name: str, pokemon_stat_distribution: dict[Stat, Counter[int, int]], num: int):
+    output_filename = f'{stats_dir}/out/{pokemon_name}.txt'
+    makedirs(dirname(output_filename), exist_ok=True)
+    with open(output_filename, 'w') as f:
         f.write(f'{pokemon_name}\n\n')
         for stat, stat_value_counts in pokemon_stat_distribution.items():
             f.write(f'{stat.name}\n')
@@ -57,7 +61,9 @@ def normalize_pokemon_name(pokemon_name: str) -> str:
 
 
 def main():
-    with open('./stats/2023-01/gen9vgc2023series2-0.json', 'rb') as f:  # TODO: make file dynamic
+    stats_dir = './stats/2023-01/gen9vgc2023series2-1630'  # TODO: make dynamic
+    stats_file = 'gen9vgc2023series2-1630.json'  # TODO: make file dynamic
+    with open(f'{stats_dir}/{stats_file}', 'rb') as f:
         for pokemon_name, pokemon_stats in ijson.kvitems(f, 'data'):
             normalized_pokemon_name = normalize_pokemon_name(str(pokemon_name))
 
@@ -89,7 +95,8 @@ def main():
 
                     pokemon_stat_distribution[stat][stat_at_lv_50] += 1
 
-            create_file(normalized_pokemon_name,
+            create_file(stats_dir,
+                        normalized_pokemon_name,
                         pokemon_stat_distribution, len(spreads))
 
             sleep(1 / TPS)

@@ -29,22 +29,28 @@ NATURE_MODIFIERS: dict[Nature, dict[Stat, float]] = {
     Nature.CALM: {Stat.SPECIAL_DEFENSE: 1.1, Stat.ATTACK: 0.9},
     Nature.GENTLE: {Stat.SPECIAL_DEFENSE: 1.1, Stat.DEFENSE: 0.9},
     Nature.SASSY: {Stat.SPECIAL_DEFENSE: 1.1, Stat.SPEED: 0.9},
-    Nature.CAREFUL: {Stat.SPECIAL_DEFENSE: 1.1, Stat.ATTACK: 0.9},
+    Nature.CAREFUL: {Stat.SPECIAL_DEFENSE: 1.1, Stat.SPECIAL_ATTACK: 0.9},
     Nature.QUIRKY: {}
 }
 
 
 def _calc_hp_stat(base_stat: int, effort_values: int, level: int):
-    return floor(((2 * base_stat + MAX_INDIVIDUAL_VALUE +
-                   effort_values / 4 + 100) * level) / 100 + 10)
+    return floor(
+        ((2 * base_stat + MAX_INDIVIDUAL_VALUE + floor(effort_values / 4)) * level)
+        / 100
+    ) + level + 10
 
 
 def _calc_non_hp_stat(base_stat: int, effort_values: int, stat: Stat, nature: Nature, level: int):
     nature_modifier = NATURE_MODIFIERS.get(nature).get(stat, 1)
     individual_value = MIN_INDIVIDUAL_VALUE if nature_modifier < 1 else MAX_INDIVIDUAL_VALUE
 
-    return floor((((2 * base_stat + individual_value + effort_values / 4)
-                   * level) / 100 + 5) * nature_modifier)
+    return floor(
+        (floor(
+            ((2 * base_stat + individual_value + floor(effort_values / 4)) * level)
+            / 100) + 5
+         ) * nature_modifier
+    )
 
 
 def _calc_stat(stat: Stat, base_stat: int, effort_values: int, nature: Nature, level: int):

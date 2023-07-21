@@ -31,7 +31,7 @@ POKEBASE_NORMALIZED_POKEMON_NAMES = {
     'basculegion-f': 'basculegion-female',
 }
 TPS = 100
-PHYSICAL_BULK = 'Phsyical Bulk'
+PHYSICAL_BULK = 'Physical Bulk'
 SPECIAL_BULK = 'Special Bulk'
 
 

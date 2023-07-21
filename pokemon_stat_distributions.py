@@ -22,6 +22,13 @@ POKEBASE_NORMALIZED_POKEMON_NAMES = {
     'tauros-paldea-blaze': 'tauros-paldea-blaze-breed',
     'tauros-paldea-combat': 'tauros-paldea-combat-breed',
     'toxtricity': 'toxtricity-amped',
+    'tornadus': 'tornadus-incarnate',
+    'thundurus': 'tornadus-incarnate',
+    'landorus': 'landorus-incarnate',
+    'enamorus': 'enamorus-incarnate',
+    'urshifu': 'urshifu-single-strike',
+    'basculegion': 'basculegion-male',
+    'basculegion-f': 'basculegion-female',
 }
 TPS = 100
 PHYSICAL_BULK = 'Phsyical Bulk'
@@ -64,8 +71,8 @@ def normalize_pokemon_name(pokemon_name: str) -> str:
 
 def main():
     stats = 'stats'  # TODO: make dynamic
-    month = '2023-05'
-    metagame_rating = 'gen9vgc2023regulationc-1630'  # TODO: make file dynamic
+    month = '2023-06'
+    metagame_rating = 'gen9vgc2023regulationd-1630'  # TODO: make file dynamic
     with open(f'./{stats}/{month}/{metagame_rating}/{metagame_rating}.json', 'rb') as f:
         for pokemon_name, pokemon_stats in ijson.kvitems(f, 'data'):
             normalized_pokemon_name = normalize_pokemon_name(str(pokemon_name))
